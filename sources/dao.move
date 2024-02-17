@@ -97,7 +97,7 @@ module dao::contract {
     }   
 
     public fun increaseShares(dao: &mut Dao, accountCap: &mut AccountCap, amount: Coin<SUI>, _ctx: &mut TxContext): u64 {
-        // check that user passes in the right objects
+        // check that user passes in the correct objects
         assert!(&accountCap.daoId == object::uid_as_inner(&dao.id), EWrongDao);
 
         // get shares amount
@@ -119,7 +119,7 @@ module dao::contract {
     } 
 
     public fun redeemShares(dao: &mut Dao, accountCap: &mut AccountCap, amount: u64, ctx: &mut TxContext): Coin<SUI> {
-        // check that user passes in the right objects
+        // check that user passes in the correct objects
         assert!(&accountCap.daoId == object::uid_as_inner(&dao.id), EWrongDao);
 
         // check that user has enough shares
@@ -198,16 +198,15 @@ module dao::contract {
     }
 
     public fun executeProposal(dao: &mut Dao, accountCap: &mut AccountCap, proposal: &mut Proposal, clock: &Clock, ctx: &mut TxContext): (bool, Coin<SUI>) {
-        // check that user passes in the right objects
+        // check that user passes in the correct objects
         assert!(&accountCap.daoId == object::uid_as_inner(&dao.id), EWrongDao);
         assert!(&proposal.daoId == object::uid_as_inner(&dao.id), EWrongDao);
 
-        // check that time for voting has elasped
+        // check that voting time has elapsed
         assert!(proposal.ends < clock::timestamp_ms(clock), EVotingNotEnded);
 
-        // calculate voting result
+        // calculate voting result based on total sahres
         let amountTotalShares = balance::value(&dao.totalShares);
-
         let result = proposal.votes / amountTotalShares * 100;
 
         // set dao as ended
