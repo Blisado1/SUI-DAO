@@ -39,3 +39,12 @@ sui move build
 ```
 sui client publish --gas-budget 100000000 --json
 ```
+
+4. **Test:**
+   Test the compiled the smart contract
+   
+```
+sui move test
+```
+   
+   ![test](./assets//img/test.png)
